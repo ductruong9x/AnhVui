@@ -30,6 +30,8 @@ import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 import com.truongtvd.anhvui.adapter.DetailAdapter;
 import com.truongtvd.anhvui.model.ItemNewFeed;
 import com.truongtvd.anhvui.network.NetworkOperator;
@@ -43,8 +45,8 @@ public class MainActivity extends SherlockActivity {
 	private NetworkOperator operator;
 	private Session session;
 	private ProgressBar loading;
-
 	private String id, avatar, nameUser;
+	private AdView adView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,8 @@ public class MainActivity extends SherlockActivity {
 		operator = NetworkOperator.getInstance().init(this);
 		vpMain = (ViewPager) findViewById(R.id.vpMain);
 		loading = (ProgressBar) findViewById(R.id.loading);
-
+		adView = (AdView) findViewById(R.id.adFragment);
+		adView.loadAd(new AdRequest());
 		try {
 			if (!Session.getActiveSession().getPermissions()
 					.contains("publish_actions")) {

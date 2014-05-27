@@ -1,23 +1,39 @@
 package com.truongtvd.anhvui.adapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.RequestAsyncTask;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.Session.NewPermissionsRequest;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,6 +44,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.truongtvd.anhvui.MyApplication;
 import com.truongtvd.anhvui.R;
+import com.truongtvd.anhvui.model.CommentInfo;
 import com.truongtvd.anhvui.model.ItemNewFeed;
 import com.truongtvd.anhvui.network.MyVolley;
 import com.truongtvd.anhvui.network.NetworkOperator;
@@ -36,6 +53,7 @@ import com.truongtvd.anhvui.view.OnAvatarClickListener;
 import com.truongtvd.anhvui.view.OnCloseClickListener;
 import com.truongtvd.anhvui.view.OnCommentClickListener;
 import com.truongtvd.anhvui.view.OnLikeClickListener;
+import com.truongtvd.anhvui.view.OnSendClickListener;
 
 public class DetailAdapter extends PagerAdapter implements OnClickListener {
 	private Context context;
@@ -49,6 +67,7 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 	private boolean isOpen = false;
 	private NetworkOperator operator;
 	private ViewHolder viewHolder;
+	private ProgressDialog dialog;
 
 	public DetailAdapter(Context context, ArrayList<ItemNewFeed> listNew) {
 		this.context = context;
@@ -71,6 +90,8 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 				.build();
 		imgLoader.init(config);
 		operator = NetworkOperator.getInstance().init(context);
+		dialog = new ProgressDialog(context);
+		dialog.setMessage("Sharing...");
 	}
 
 	@Override
@@ -110,6 +131,12 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 		viewHolder.load = (ProgressBar) detailview.findViewById(R.id.load);
 		viewHolder.lvListComment = (ListView) detailview
 				.findViewById(R.id.lvListComment);
+		viewHolder.imgMyAvatar = (ImageView) detailview
+				.findViewById(R.id.imgMyAvatar);
+		viewHolder.edComment = (EditText) detailview
+				.findViewById(R.id.edComment);
+		viewHolder.btnSend = (Button) detailview.findViewById(R.id.btnSend);
+
 		TextView tvDes = (TextView) detailview.findViewById(R.id.tvDes);
 		FadeInNetworkImageView imgDetail = (FadeInNetworkImageView) detailview
 				.findViewById(R.id.imgDetial);
@@ -153,11 +180,14 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 				viewHolder));
 		viewHolder.btnShare.setOnClickListener(this);
 		viewHolder.btnComment.setOnClickListener(new OnCommentClickListener(
-				context, viewHolder, item, operator));
+				context, viewHolder, item, operator, imgLoader, options));
 		viewHolder.btnLike.setOnClickListener(new OnLikeClickListener(context,
 				viewHolder, item));
 		viewHolder.btnClose.setOnClickListener(new OnCloseClickListener(
 				viewHolder));
+		viewHolder.btnSend.setOnClickListener(new OnSendClickListener(context,
+				viewHolder, item));
+
 		((ViewPager) container).addView(detailview, 0);
 		return detailview;
 	}
@@ -194,8 +224,46 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 
 			break;
 		case R.id.btnShare:
+			try {
+				if (!Session.getActiveSession().getPermissions()
+						.contains("publish_actions")) {
+					NewPermissionsRequest request = new NewPermissionsRequest(
+							(Activity) context,
+							Arrays.asList("publish_actions"));
+
+					Session.getActiveSession().requestNewPublishPermissions(
+							request);
+					return;
+				}
+			} catch (Exception e) {
+
+			}
+			dialog.show();
+			Bundle postParams = new Bundle();
+			postParams.putString("name", "Ảnh vui");
+			postParams.putString("message", item.getImage());
+			postParams.putString("description", item.getMessage());
+			postParams
+					.putString("link",
+							"https://play.google.com/store/apps/details?id=com.truongtvd.anhvui");
+			postParams.putString("picture", item.getImage());
+
+			Request.Callback callback = new Request.Callback() {
+				public void onCompleted(Response response) {
+					dialog.dismiss();
+					Toast.makeText(context, "Share successfuly	",
+							Toast.LENGTH_SHORT).show();
+				}
+			};
+
+			Request request = new Request(Session.getActiveSession(),
+					"me/feed", postParams, HttpMethod.POST, callback);
+
+			RequestAsyncTask task = new RequestAsyncTask(request);
+			task.execute();
 
 			break;
+
 		}
 	}
 
@@ -207,5 +275,9 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 		public ImageButton btnClose;
 		public ProgressBar load;
 		public ListView lvListComment;
+		public ImageView imgMyAvatar;
+		public EditText edComment;
+		public Button btnSend;
 	}
+
 }

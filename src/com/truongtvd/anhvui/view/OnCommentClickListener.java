@@ -5,12 +5,22 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.truongtvd.anhvui.MyApplication;
 import com.truongtvd.anhvui.R;
 import com.truongtvd.anhvui.adapter.CommentItemAdapter;
 import com.truongtvd.anhvui.adapter.DetailAdapter.ViewHolder;
@@ -29,13 +39,18 @@ public class OnCommentClickListener implements OnClickListener {
 	public static ArrayList<CommentInfo> listcomment = new ArrayList<CommentInfo>();
 	public static CommentItemAdapter adapter;
 	private Context context;
+	private ImageLoader imgLoader;
+	private DisplayImageOptions options;
 
 	public OnCommentClickListener(Context context, ViewHolder viewHolder,
-			ItemNewFeed item, NetworkOperator operator) {
+			ItemNewFeed item, NetworkOperator operator, ImageLoader imgLoader,
+			DisplayImageOptions options) {
 		this.context = context;
 		this.viewHolder = viewHolder;
 		this.item = item;
 		this.operator = operator;
+		this.imgLoader = imgLoader;
+		this.options = options;
 
 	}
 
@@ -46,7 +61,11 @@ public class OnCommentClickListener implements OnClickListener {
 			viewHolder.comment_detail.setAnimation(AnimationUtil
 					.translateAnimation(0, 0, -1500, 0));
 			viewHolder.comment_detail.setVisibility(View.VISIBLE);
+			imgLoader.displayImage(MyApplication.getAvater(),
+					viewHolder.imgMyAvatar, options, imageload);
+
 			getListCommemt();
+
 			isOpen = true;
 		} else {
 			viewHolder.comment_detail.setAnimation(AnimationUtil
@@ -61,6 +80,7 @@ public class OnCommentClickListener implements OnClickListener {
 	private void getListCommemt() {
 		operator.getNewsFeedComments(item.getPost_id(), 300, getListSuccess(),
 				getListError());
+
 	}
 
 	private ErrorListener getListError() {
@@ -87,6 +107,7 @@ public class OnCommentClickListener implements OnClickListener {
 				adapter = new CommentItemAdapter(context,
 						R.layout.item_comment, listcomment);
 				viewHolder.lvListComment.setAdapter(adapter);
+
 			}
 		};
 	}
@@ -96,4 +117,32 @@ public class OnCommentClickListener implements OnClickListener {
 		adapter.notifyDataSetChanged();
 	}
 
+	ImageLoadingListener imageload = new ImageLoadingListener() {
+
+		@Override
+		public void onLoadingStarted(String imageUri, View view) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onLoadingFailed(String imageUri, View view,
+				FailReason failReason) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onLoadingComplete(String imageUri, View view,
+				Bitmap loadedImage) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onLoadingCancelled(String imageUri, View view) {
+			// TODO Auto-generated method stub
+
+		}
+	};
 }
