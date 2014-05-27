@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -176,4 +177,50 @@ public class MainActivity extends SherlockActivity {
 		};
 	}
 
+	public void danhGia() {
+		SharedPreferences getPre = getSharedPreferences("SAVE", MODE_PRIVATE);
+		int i = getPre.getInt("VOTE", 0);
+		SharedPreferences pre;
+		SharedPreferences.Editor edit;
+		switch (i) {
+		case 0:
+			pre = getSharedPreferences("SAVE", MODE_PRIVATE);
+			edit = pre.edit();
+			edit.putInt("VOTE", 1);
+			edit.commit();
+			break;
+		case 1:
+			pre = getSharedPreferences("SAVE", MODE_PRIVATE);
+			edit = pre.edit();
+			edit.putInt("VOTE", i + 1);
+			edit.commit();
+			break;
+		case 2:
+			pre = getSharedPreferences("SAVE", MODE_PRIVATE);
+			edit = pre.edit();
+			edit.putInt("VOTE", i + 1);
+			edit.commit();
+			break;
+		case 3:
+			pre = getSharedPreferences("SAVE", MODE_PRIVATE);
+			edit = pre.edit();
+			edit.putInt("VOTE", i + 1);
+			edit.commit();
+			break;
+		case 4:
+			pre = getSharedPreferences("SAVE", MODE_PRIVATE);
+			edit = pre.edit();
+			edit.putInt("VOTE", i + 1);
+			edit.commit();
+			break;
+		case 5:
+			DialogVote dialog = new DialogVote(MainActivity.this);
+			dialog.show();
+			pre = getSharedPreferences("SAVE", MODE_PRIVATE);
+			edit = pre.edit();
+			edit.putInt("VOTE", 5);
+			edit.commit();
+			break;
+		}
+	}
 }

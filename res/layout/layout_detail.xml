@@ -32,6 +32,76 @@
     </ScrollView>
 
     <RelativeLayout
+        android:id="@+id/comment_detail"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_above="@+id/layout_botton"
+        android:visibility="gone" >
+
+        <RelativeLayout
+            android:id="@+id/layout_comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/popup_bg"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/lvListComment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/layout_comment"
+                android:divider="@null"
+                android:dividerHeight="0dp" >
+            </ListView>
+
+            <LinearLayout
+                android:id="@+id/layout_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/imgMyAvatar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/ic_default" />
+
+                <EditText
+                    android:id="@+id/edComment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Input comment..." />
+
+                <Button
+                    android:id="@+id/btnSend"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/btnsend" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/btnCloseComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/close" />
+
+        <ProgressBar
+            android:id="@+id/load"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/layout_botton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

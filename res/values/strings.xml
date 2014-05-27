@@ -4,4 +4,15 @@
     <string name="app_id">242607052596625</string>
     <string name="facebook">Cần đăng nhập Facebook để sử dụng</string>
 
+    <color name="blue">#42A3FF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue_press">#214465</color>
+
+    <string name="thank">I really thank you when you evaluate my application ...</string>
+    <string name="title">Vote for my app :)</string>
+    <string name="content">You can vote for my application???</string>
+    <string name="ok">Ok</string>
+    <string name="novote">Do not show again</string>
+    <string name="later">Later</string>
+
 </resources>

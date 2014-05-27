@@ -49,16 +49,17 @@ public class OnLikeClickListener implements OnClickListener {
 	}
 
 	private class LikeFacebook extends AsyncTask<String, Void, Void> {
+		private ProgressDialog dialog;
 
 		public LikeFacebook() {
-
+			dialog = new ProgressDialog(context);
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-
+			dialog.dismiss();
 			Toast.makeText(context, "Like sucessfuly", Toast.LENGTH_SHORT)
 					.show();
 		}
@@ -67,6 +68,8 @@ public class OnLikeClickListener implements OnClickListener {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
+			dialog.setMessage("Loading,,,");
+			dialog.show();
 
 		}
 

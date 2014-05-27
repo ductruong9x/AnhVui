@@ -4,25 +4,20 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -35,8 +30,11 @@ import com.truongtvd.anhvui.MyApplication;
 import com.truongtvd.anhvui.R;
 import com.truongtvd.anhvui.model.ItemNewFeed;
 import com.truongtvd.anhvui.network.MyVolley;
+import com.truongtvd.anhvui.network.NetworkOperator;
 import com.truongtvd.anhvui.view.FadeInNetworkImageView;
 import com.truongtvd.anhvui.view.OnAvatarClickListener;
+import com.truongtvd.anhvui.view.OnCloseClickListener;
+import com.truongtvd.anhvui.view.OnCommentClickListener;
 import com.truongtvd.anhvui.view.OnLikeClickListener;
 
 public class DetailAdapter extends PagerAdapter implements OnClickListener {
@@ -49,8 +47,7 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 	private ArrayList<ItemNewFeed> listNew = null;
 	private ItemNewFeed item;
 	private boolean isOpen = false;
-	// ImageView btnAvatar;
-	// ImageButton btnShare, btnComment, btnLike;
+	private NetworkOperator operator;
 	private ViewHolder viewHolder;
 
 	public DetailAdapter(Context context, ArrayList<ItemNewFeed> listNew) {
@@ -73,6 +70,7 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 				.writeDebugLogs() // Remove for release app
 				.build();
 		imgLoader.init(config);
+		operator = NetworkOperator.getInstance().init(context);
 	}
 
 	@Override
@@ -105,6 +103,13 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 				.findViewById(R.id.tvCountComment);
 		viewHolder.tvCountLike = (TextView) detailview
 				.findViewById(R.id.tvCountLike);
+		viewHolder.comment_detail = (RelativeLayout) detailview
+				.findViewById(R.id.comment_detail);
+		viewHolder.btnClose = (ImageButton) detailview
+				.findViewById(R.id.btnCloseComment);
+		viewHolder.load = (ProgressBar) detailview.findViewById(R.id.load);
+		viewHolder.lvListComment = (ListView) detailview
+				.findViewById(R.id.lvListComment);
 		TextView tvDes = (TextView) detailview.findViewById(R.id.tvDes);
 		FadeInNetworkImageView imgDetail = (FadeInNetworkImageView) detailview
 				.findViewById(R.id.imgDetial);
@@ -147,9 +152,12 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 		viewHolder.btnAvatar.setOnClickListener(new OnAvatarClickListener(
 				viewHolder));
 		viewHolder.btnShare.setOnClickListener(this);
-		viewHolder.btnComment.setOnClickListener(this);
+		viewHolder.btnComment.setOnClickListener(new OnCommentClickListener(
+				context, viewHolder, item, operator));
 		viewHolder.btnLike.setOnClickListener(new OnLikeClickListener(context,
 				viewHolder, item));
+		viewHolder.btnClose.setOnClickListener(new OnCloseClickListener(
+				viewHolder));
 		((ViewPager) container).addView(detailview, 0);
 		return detailview;
 	}
@@ -193,7 +201,11 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 
 	public class ViewHolder {
 		public ImageView btnAvatar;
-		public RelativeLayout btnShare, btnComment, btnLike;
+		public RelativeLayout btnShare, btnLike, comment_detail;
 		public TextView tvCountLike, tvCountComment;
+		public RelativeLayout btnComment;
+		public ImageButton btnClose;
+		public ProgressBar load;
+		public ListView lvListComment;
 	}
 }
