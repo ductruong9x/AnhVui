@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="top_item">#a6c</color>
+    <color name="bg_user">#f5f7f9</color>
+    <color name="menu_left_divider">#e5eaef</color>
+    <color name="system_text">#8795aa</color>
+    <color name="cache_colorhint">#00000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000</color>
+    <color name="brand_color">#2387cd</color>
+    <color name="tab_indicator_color">#419edf</color>
+    <color name="blue_transparent">#888adcfb</color>
+    <color name="light_blue_transparent">#88C4EEFD</color>
+    <color name="bg_color">#f0f3f6</color>
+    <color name="gray_line">#AAAAAA</color>
+    <color name="pin_progress_default_circle_color">#80ffffff</color>
+    <color name="pin_progress_default_progress_color">#33b5e5</color>
+
+    <drawable name="ab_bg_black">#aa000000</drawable>
+
+    <color name="ab_bg_black_trans">#aa000000</color>
+    <color name="light_gray">#E8E8E8</color>
+    <color name="pressed_appota">#CC33B5E5</color>
+    <color name="action_bar_color">#FF3F9FE0</color>
+    <color name="red">#EC3636</color>
+    <color name="chat_user_text_color">#727272</color>
+    <color name="yellows">#E5F512</color>
+    <color name="gray">#EAEAEA</color>
+    <color name="app_color">#2357bc</color>
+
+</resources>
