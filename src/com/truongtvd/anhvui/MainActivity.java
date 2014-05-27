@@ -13,7 +13,10 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -21,6 +24,8 @@ import com.actionbarsherlock.view.Window;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
@@ -30,8 +35,11 @@ import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
+import com.google.ads.InterstitialAd;
 import com.truongtvd.anhvui.adapter.DetailAdapter;
 import com.truongtvd.anhvui.model.ItemNewFeed;
 import com.truongtvd.anhvui.network.NetworkOperator;
@@ -47,6 +55,7 @@ public class MainActivity extends SherlockActivity {
 	private ProgressBar loading;
 	private String id, avatar, nameUser;
 	private AdView adView;
+	private ImageButton btnInvate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +63,11 @@ public class MainActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+
 		session = Session.getActiveSession();
 		operator = NetworkOperator.getInstance().init(this);
 		vpMain = (ViewPager) findViewById(R.id.vpMain);
+		btnInvate = (ImageButton) findViewById(R.id.btnInvate);
 		loading = (ProgressBar) findViewById(R.id.loading);
 		adView = (AdView) findViewById(R.id.adFragment);
 		adView.loadAd(new AdRequest());
@@ -82,6 +93,62 @@ public class MainActivity extends SherlockActivity {
 
 		}
 		getIDUser();
+		btnInvate.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				sendRequestDialog();
+			}
+		});
+	}
+
+	private void sendRequestDialog() {
+		Bundle params = new Bundle();
+		params.putString("message", "Sử dụng Ảnh VL để vui hơn nhé");
+
+		WebDialog requestsDialog = (new WebDialog.RequestsDialogBuilder(
+				MainActivity.this, Session.getActiveSession(), params))
+				.setOnCompleteListener(new OnCompleteListener() {
+
+					@Override
+					public void onComplete(Bundle values,
+							FacebookException error) {
+						if (error != null) {
+							if (error instanceof FacebookOperationCanceledException) {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Request cancelled", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Network Error", Toast.LENGTH_SHORT)
+										.show();
+							}
+						} else {
+							final String requestId = values
+									.getString("request");
+							if (requestId != null) {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Request sent", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Request cancelled", Toast.LENGTH_SHORT)
+										.show();
+							}
+						}
+					}
+
+				}).build();
+		requestsDialog.show();
 	}
 
 	@Override

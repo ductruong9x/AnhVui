@@ -18,6 +18,14 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
+    <ImageButton
+        android:id="@+id/btnInvate"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:alpha="0.5"
+        android:background="@drawable/icon_facebook" />
+
     <com.google.ads.AdView
         xmlns:app="http://schemas.android.com/apk/lib/com.google.ads"
         android:id="@+id/adFragment"
@@ -25,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-6063844612770322/5812967691"
+        app:adUnitId="ca-app-pub-6063844612770322/7329740094"
         app:refreshInterval="30" />
 
 </RelativeLayout>

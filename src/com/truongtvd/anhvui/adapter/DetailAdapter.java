@@ -7,17 +7,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,6 +31,11 @@ import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.Session.NewPermissionsRequest;
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdRequest.ErrorCode;
+import com.google.ads.InterstitialAd;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,7 +46,6 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.truongtvd.anhvui.MyApplication;
 import com.truongtvd.anhvui.R;
-import com.truongtvd.anhvui.model.CommentInfo;
 import com.truongtvd.anhvui.model.ItemNewFeed;
 import com.truongtvd.anhvui.network.MyVolley;
 import com.truongtvd.anhvui.network.NetworkOperator;
@@ -68,6 +69,8 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 	private NetworkOperator operator;
 	private ViewHolder viewHolder;
 	private ProgressDialog dialog;
+	private InterstitialAd interstitial;
+	private String MY_AD_UNIT_ID = "ca-app-pub-6063844612770322/7329740094";
 
 	public DetailAdapter(Context context, ArrayList<ItemNewFeed> listNew) {
 		this.context = context;
@@ -92,6 +95,9 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 		operator = NetworkOperator.getInstance().init(context);
 		dialog = new ProgressDialog(context);
 		dialog.setMessage("Sharing...");
+		interstitial = new InterstitialAd((Activity) context, MY_AD_UNIT_ID);
+		AdRequest request = new AdRequest();
+		interstitial.loadAd(request);
 	}
 
 	@Override
@@ -137,6 +143,9 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 				.findViewById(R.id.edComment);
 		viewHolder.btnSend = (Button) detailview.findViewById(R.id.btnSend);
 
+		if (position % 10 == 0) {
+			interstitial.show();
+		}
 		TextView tvDes = (TextView) detailview.findViewById(R.id.tvDes);
 		FadeInNetworkImageView imgDetail = (FadeInNetworkImageView) detailview
 				.findViewById(R.id.imgDetial);
