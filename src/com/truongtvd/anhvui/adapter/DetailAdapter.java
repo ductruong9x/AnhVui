@@ -55,6 +55,7 @@ import com.truongtvd.anhvui.view.OnCloseClickListener;
 import com.truongtvd.anhvui.view.OnCommentClickListener;
 import com.truongtvd.anhvui.view.OnLikeClickListener;
 import com.truongtvd.anhvui.view.OnSendClickListener;
+import com.truongtvd.anhvui.view.OnShareClickListener;
 
 public class DetailAdapter extends PagerAdapter implements OnClickListener {
 	private Context context;
@@ -187,7 +188,8 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 		Linkify.addLinks(tvDes, Linkify.ALL);
 		viewHolder.btnAvatar.setOnClickListener(new OnAvatarClickListener(
 				viewHolder));
-		viewHolder.btnShare.setOnClickListener(this);
+		viewHolder.btnShare.setOnClickListener(new OnShareClickListener(
+				context, item));
 		viewHolder.btnComment.setOnClickListener(new OnCommentClickListener(
 				context, viewHolder, item, operator, imgLoader, options));
 		viewHolder.btnLike.setOnClickListener(new OnLikeClickListener(context,
@@ -230,46 +232,6 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 
 			break;
 		case R.id.btnLike:
-
-			break;
-		case R.id.btnShare:
-			try {
-				if (!Session.getActiveSession().getPermissions()
-						.contains("publish_actions")) {
-					NewPermissionsRequest request = new NewPermissionsRequest(
-							(Activity) context,
-							Arrays.asList("publish_actions"));
-
-					Session.getActiveSession().requestNewPublishPermissions(
-							request);
-					return;
-				}
-			} catch (Exception e) {
-
-			}
-			dialog.show();
-			Bundle postParams = new Bundle();
-			postParams.putString("name", "Ảnh vui");
-			postParams.putString("message", item.getImage());
-			postParams.putString("description", item.getMessage());
-			postParams
-					.putString("link",
-							"https://play.google.com/store/apps/details?id=com.truongtvd.anhvui");
-			postParams.putString("picture", item.getImage());
-
-			Request.Callback callback = new Request.Callback() {
-				public void onCompleted(Response response) {
-					dialog.dismiss();
-					Toast.makeText(context, "Share successfuly	",
-							Toast.LENGTH_SHORT).show();
-				}
-			};
-
-			Request request = new Request(Session.getActiveSession(),
-					"me/feed", postParams, HttpMethod.POST, callback);
-
-			RequestAsyncTask task = new RequestAsyncTask(request);
-			task.execute();
 
 			break;
 

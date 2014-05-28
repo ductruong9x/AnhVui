@@ -67,6 +67,7 @@ public class MainActivity extends SherlockActivity {
 		session = Session.getActiveSession();
 		operator = NetworkOperator.getInstance().init(this);
 		vpMain = (ViewPager) findViewById(R.id.vpMain);
+		vpMain.setOffscreenPageLimit(1);
 		btnInvate = (ImageButton) findViewById(R.id.btnInvate);
 		loading = (ProgressBar) findViewById(R.id.loading);
 		adView = (AdView) findViewById(R.id.adFragment);
