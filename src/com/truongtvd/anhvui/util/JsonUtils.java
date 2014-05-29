@@ -1,6 +1,7 @@
 package com.truongtvd.anhvui.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +49,7 @@ public class JsonUtils {
 				item.setPost_id(content.getString("object_id") + "");
 				item.setImage(content.getString("src_big"));
 				list.add(item);
+				Collections.shuffle(list);
 
 			}
 
