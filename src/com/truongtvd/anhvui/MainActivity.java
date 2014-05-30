@@ -72,27 +72,27 @@ public class MainActivity extends SherlockActivity {
 		loading = (ProgressBar) findViewById(R.id.loading);
 		adView = (AdView) findViewById(R.id.adFragment);
 		adView.loadAd(new AdRequest());
-		try {
-			if (!Session.getActiveSession().getPermissions()
-					.contains("publish_actions")) {
-				NewPermissionsRequest request = new NewPermissionsRequest(this,
-						Arrays.asList("publish_actions"));
-				request.setCallback(new StatusCallback() {
-
-					@Override
-					public void call(Session session, SessionState state,
-							Exception exception) {
-						// TODO Auto-generated method stub
-						Log.e("PER", session.getPermissions().toString());
-					}
-				});
-				Session.getActiveSession()
-						.requestNewPublishPermissions(request);
-
-			}
-		} catch (Exception e) {
-
-		}
+//		try {
+//			if (!Session.getActiveSession().getPermissions()
+//					.contains("publish_actions")) {
+//				NewPermissionsRequest request = new NewPermissionsRequest(this,
+//						Arrays.asList("publish_actions"));
+//				request.setCallback(new StatusCallback() {
+//
+//					@Override
+//					public void call(Session session, SessionState state,
+//							Exception exception) {
+//						// TODO Auto-generated method stub
+//						Log.e("PER", session.getPermissions().toString());
+//					}
+//				});
+//				Session.getActiveSession()
+//						.requestNewPublishPermissions(request);
+//
+//			}
+//		} catch (Exception e) {
+//
+//		}
 		getIDUser();
 		btnInvate.setOnClickListener(new OnClickListener() {
 
