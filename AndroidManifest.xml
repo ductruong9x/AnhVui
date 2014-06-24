@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.truongtvd.anhvui"
-    android:versionCode="7"
-    android:versionName="1.1.5" >
+    package="com.gamefree.anhvui"
+    android:versionCode="8"
+    android:versionName="1.1.6" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -11,14 +11,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.truongtvd.anhvui.MyApplication"
+        android:name="com.gamefree.anhvui.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Sherlock.__Theme.DarkActionBar" >
-        <activity android:name="com.truongtvd.anhvui.MainActivity" >
+        <activity android:name="com.gamefree.anhvui.MainActivity" >
         </activity>
-        <activity android:name="com.truongtvd.anhvui.StartActivity" >
+        <activity android:name="com.gamefree.anhvui.StartActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

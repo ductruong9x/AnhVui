@@ -5,7 +5,7 @@
     android:background="@drawable/bg_default"
     android:orientation="vertical" >
 
-    <com.truongtvd.anhvui.view.FadeInNetworkImageView
+    <com.gamefree.anhvui.view.FadeInNetworkImageView
         android:id="@+id/imgDetial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
