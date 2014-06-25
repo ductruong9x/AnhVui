@@ -37,8 +37,10 @@ import com.gamefree.anhvui.adapter.DetailAdapter;
 import com.gamefree.anhvui.model.ItemNewFeed;
 import com.gamefree.anhvui.network.NetworkOperator;
 import com.gamefree.anhvui.util.JsonUtils;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+
 
 public class MainActivity extends SherlockActivity {
 	private ActionBar actionBar;
@@ -51,6 +53,8 @@ public class MainActivity extends SherlockActivity {
 	private String id, avatar, nameUser;
 	private AdView adView;
 	private ImageButton btnInvate;
+	private InterstitialAd interstitialAd;
+	private String UNIT_ID="ca-app-pub-1857950562418699/2652888361";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,10 @@ public class MainActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-
+		interstitialAd=new InterstitialAd(this);
+		interstitialAd.setAdUnitId(UNIT_ID);
+		interstitialAd.loadAd(new AdRequest.Builder().build());
+		
 		session = Session.getActiveSession();
 		operator = NetworkOperator.getInstance().init(this);
 		vpMain = (ViewPager) findViewById(R.id.vpMain);
@@ -66,7 +73,7 @@ public class MainActivity extends SherlockActivity {
 		btnInvate = (ImageButton) findViewById(R.id.btnInvate);
 		loading = (ProgressBar) findViewById(R.id.loading);
 		adView = (AdView) findViewById(R.id.adFragment);
-		adView.loadAd(new AdRequest());
+		adView.loadAd(new AdRequest.Builder().build());
 
 		getIDUser();
 		btnInvate.setOnClickListener(new OnClickListener() {
@@ -268,5 +275,12 @@ public class MainActivity extends SherlockActivity {
 			edit.commit();
 			break;
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		interstitialAd.show();
+		super.onBackPressed();
 	}
 }

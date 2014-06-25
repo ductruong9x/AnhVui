@@ -34,8 +34,9 @@ import com.gamefree.anhvui.view.OnCommentClickListener;
 import com.gamefree.anhvui.view.OnLikeClickListener;
 import com.gamefree.anhvui.view.OnSendClickListener;
 import com.gamefree.anhvui.view.OnShareClickListener;
-import com.google.ads.AdRequest;
-import com.google.ads.InterstitialAd;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -59,7 +60,7 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 	private ViewHolder viewHolder;
 	private ProgressDialog dialog;
 	private InterstitialAd interstitial;
-	private String MY_AD_UNIT_ID = "ca-app-pub-6063844612770322/7329740094";
+	private String MY_AD_UNIT_ID = "ca-app-pub-1857950562418699/2652888361";
 
 	public DetailAdapter(Context context, ArrayList<ItemNewFeed> listNew) {
 		this.context = context;
@@ -84,8 +85,9 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 		operator = NetworkOperator.getInstance().init(context);
 		dialog = new ProgressDialog(context);
 		dialog.setMessage("Sharing...");
-		interstitial = new InterstitialAd((Activity) context, MY_AD_UNIT_ID);
-		AdRequest request = new AdRequest();
+		interstitial = new InterstitialAd(context);
+		interstitial.setAdUnitId(MY_AD_UNIT_ID);
+		AdRequest request = new AdRequest.Builder().build();
 		interstitial.loadAd(request);
 	}
 
@@ -134,6 +136,14 @@ public class DetailAdapter extends PagerAdapter implements OnClickListener {
 
 		if (position % 10 == 0) {
 			interstitial.show();
+			interstitial.setAdListener(new AdListener() {
+				@Override
+				public void onAdClosed() {
+					// TODO Auto-generated method stub
+					interstitial.loadAd(new AdRequest.Builder().build());
+					super.onAdClosed();
+				}
+			});
 		}
 		TextView tvDes = (TextView) detailview.findViewById(R.id.tvDes);
 		FadeInNetworkImageView imgDetail = (FadeInNetworkImageView) detailview
